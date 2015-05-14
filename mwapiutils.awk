@@ -6,9 +6,6 @@
 #
 function sys2var(command        ,fish, scale, ship) {
 
-         if ( G["debug"] == "yes" )
-             print "command="command
-
          command = command " 2>/dev/null"
          while ( (command | getline fish) > 0 ) {
              if ( ++scale == 1 )
