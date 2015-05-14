@@ -36,7 +36,6 @@ function parse_value(a1, a2,   jpath,ret,x) {
         }
         } else if (TOKEN ~ /^(|[^0-9])$/) {
                 # At this point, the only valid single-character tokens are digits.
-                #report("value", TOKEN!="" ? TOKEN : "EOF")
                 return 9
         } else {
                 VALUE=TOKEN
@@ -93,12 +92,10 @@ function parse_object(a1,   key,obj) {
                         if (TOKEN ~ /^".*"$/) {
                                 key=TOKEN
                         } else {
-                                #report("string", TOKEN ? TOKEN : "EOF")
                                 return 3
                         }
                         get_token()
                         if (TOKEN != ":") {
-                                #report(":", TOKEN ? TOKEN : "EOF")
                                 return 4
                         }
                         get_token()
@@ -112,7 +109,6 @@ function parse_object(a1,   key,obj) {
                         } else if (TOKEN == ",") {
                                 obj=obj ","
                         } else {
-                                #report(", or }", TOKEN ? TOKEN : "EOF")
                                 return 6
                         }
                         get_token()
@@ -127,20 +123,19 @@ function parse(   ret) {
                 return ret
         }
         if (get_token()) {
-                #report("EOF", TOKEN)
                 return 11
         }
         return 0
 }
-function tokenize(a1,   pq,pb,ESCAPE,CHAR,STRING,NUMBER,KEYWORD,SPACE) {
+function tokenize(a1,   myspace) {
 
-        # POSIX character classes (gawk) - contact me for non-[:class:] notation
+        # POSIX character classes (gawk) 
         # Replaced regex constant for string constant, see https://github.com/step-/JSON.awk/issues/1
-        SPACE="[[:space:]]+"
+        myspace="[[:space:]]+"
         gsub(/\"[^[:cntrl:]\"\\]*((\\[^u[:cntrl:]]|\\u[0-9a-fA-F]{4})[^[:cntrl:]\"\\]*)*\"|-?(0|[1-9][0-9]*)([.][0-9]*)?([eE][+-]?[0-9]*)?|null|false|true|[[:space:]]+|./, "\n&", a1)
-        gsub("\n" SPACE, "\n", a1)
+        gsub("\n" myspace, "\n", a1)
         sub(/^\n/, "", a1)
-        ITOKENS=0 # get_token() helper
+        ITOKENS=0 
         return NTOKENS = split(a1, TOKENS, /\n/)
 
 }
