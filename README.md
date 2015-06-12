@@ -8,25 +8,20 @@ A library of functions in GNU Awk for accessing the MediaWiki API.
 For building applications in Awk that use the MediaWiki API.
 Supports read/download API functions only, not write.
 
-There are 3 library files and 1 example program (backlinks.awk).
+There are 2 library files and 1 example program (backlinks.awk).
 
 Library files
 =============
 
-http2var.awk 
+mwapi.awk
 
-	Networking code. Loads a web page to a string variable.
+	The API functions.
 
 json2var.awk
 
 	Json parser. Given a json file, return a single variable with the values needed.
-	Depending on the API call, customize a couple lines in parse_value() to extract the 
-	fields you want.
-
-mwapiutils.awk
-
-	General utility functions. 
-	Most with generic application, not just for MediaWiki API.
+	Depending on the API call, you'll customize a couple lines in parse_value() to 
+	extract the fields you want.
 
 
 Demonstration program

@@ -7,13 +7,14 @@
 #   * It includes second-level backlinks (from redirects)
 #
 
-@include "http2var.awk"
 @include "json2var.awk"
-@include "mwapiutils.awk"
+@include "mwapi.awk"
 
 BEGIN {
 
-	entity = "Template:Librivox book"
+	entity = "Template:Librivox author"
+
+        Agent = "Backlinks.awk - YourContactInfo"
 
 	if ( entity_exists(entity) ) {
 	    if ( ! backlinks(entity) ) 
