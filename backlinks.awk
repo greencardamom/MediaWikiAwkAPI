@@ -27,8 +27,11 @@ function backlinks(entity	,url, method, jsonin, jsonout, continuecode, b, c, i, 
         gsub(" ","_",entity)
 
         if ( entity ~ "^Template:") {
-            method = "eicontinue"  # include transcluded links
+            method = "eicontinue"  # transcluded links
             url = "http://en.wikipedia.org/w/api.php?action=query&list=embeddedin&eititle=" entity "&continue=&eilimit=500&format=json&utf8=1&maxlag=5"
+        } else if ( entity ~ "^File:") {
+            method = "iucontinue"  # file links
+            url = "http://en.wikipedia.org/w/api.php?action=query&list=imageusage&iutitle=" entity "&iuredirect&iulimit=250&continue=&iufilterredir=nonredirects&format=json&utf8=1&maxlag=5"
         } else {
             method = "blcontinue"  # normal links
             url = "http://en.wikipedia.org/w/api.php?action=query&list=backlinks&bltitle=" entity "&blredirect&bllimit=250&continue=&blfilterredir=nonredirects&format=json&utf8=1&maxlag=5"
@@ -42,6 +45,8 @@ function backlinks(entity	,url, method, jsonin, jsonout, continuecode, b, c, i, 
 
             if ( method == "eicontinue" )
                 url = "http://en.wikipedia.org/w/api.php?action=query&list=embeddedin&eititle=" entity "&eilimit=500&continue=-||&eicontinue=" continuecode "&format=json&utf8=1&maxlag=5"
+            if ( method == "iucontinue"
+                url = "http://en.wikipedia.org/w/api.php?action=query&list=imageusage&iutitle=" entity "&iuredirect&iulimit=250&continue=&iufilterredir=nonredirects&format=json&utf8=1&maxlag=5"
             if ( method == "blcontinue" )
                 url = "http://en.wikipedia.org/w/api.php?action=query&list=backlinks&bltitle=" entity "&blredirect&bllimit=250&continue=-||&blcontinue=" continuecode "&blfilterredir=nonredirects&format=json&utf8=1&maxlag=5"
 
@@ -54,6 +59,8 @@ function backlinks(entity	,url, method, jsonin, jsonout, continuecode, b, c, i, 
         c = split(jsonout, b, "\n")
         jsonout = ""
         while (i++ < c) {
+            if(b[i] ~ "for API usage") # intermittent bug; MediaWiki returns "See https://en.wikipedia.org/w/api.php for API usage" instead of backlinks
+                continue
             if(x[b[i]] == "")
                 x[b[i]] = b[i]
         }
