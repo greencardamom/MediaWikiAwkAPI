@@ -45,7 +45,7 @@ function backlinks(entity	,url, method, jsonin, jsonout, continuecode, b, c, i, 
 
             if ( method == "eicontinue" )
                 url = "http://en.wikipedia.org/w/api.php?action=query&list=embeddedin&eititle=" entity "&eilimit=500&continue=-||&eicontinue=" continuecode "&format=json&utf8=1&maxlag=5"
-            if ( method == "iucontinue"
+            if ( method == "iucontinue" )
                 url = "http://en.wikipedia.org/w/api.php?action=query&list=imageusage&iutitle=" entity "&iuredirect&iulimit=250&continue=&iufilterredir=nonredirects&format=json&utf8=1&maxlag=5"
             if ( method == "blcontinue" )
                 url = "http://en.wikipedia.org/w/api.php?action=query&list=backlinks&bltitle=" entity "&blredirect&bllimit=250&continue=-||&blcontinue=" continuecode "&blfilterredir=nonredirects&format=json&utf8=1&maxlag=5"
