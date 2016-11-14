@@ -38,3 +38,18 @@ backlinks.awk
 
 A complete application, "Backlinks Watchlist" is at
 	https://github.com/greencardamom/Backlinks-Watchlist
+
+
+Other awk based tools
+=====================
+Other bots and tools for Wikipedia written in awk:
+
+WebArchiveMerge
+	https://github.com/greencardamom/WebArchiveMerge
+
+WaybackMedic (version 0 is pure awk, 1+ is awk + nim)
+	https://github.com/greencardamom/WaybackMedic
+
+PG2WP
+	https://github.com/greencardamom/PG2WP
+

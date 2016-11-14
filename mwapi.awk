@@ -45,8 +45,7 @@ function entity_exists(entity   ,url, jsonin) {
 #
 function strip(str)
 {
-        gsub(/^[ \t]+/,"",str) # rm lead/trail whitespace
-        gsub(/[ \t]+$/,"",str)
+        gsub(/^[[:space:]]+|[[:space:]]+$/,"",str)
         return str
 }
 
