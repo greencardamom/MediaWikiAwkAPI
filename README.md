@@ -44,6 +44,9 @@ Other awk based tools
 =====================
 Other bots and tools for Wikipedia written in awk:
 
+Webget
+	https://github.com/greencardamom/Wikiget
+
 WebArchiveMerge
 	https://github.com/greencardamom/WebArchiveMerge
 
