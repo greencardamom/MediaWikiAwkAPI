@@ -15,7 +15,7 @@ Library files
 
 mwapi.awk
 
-	The API functions.
+	The API and other functions for building Wikipedia bots and scripts.
 
 json2var.awk
 
@@ -34,7 +34,7 @@ backlinks.awk
 
 	To run:
 
-		awk -f backlinks.awk
+		awk -bE backlinks.awk
 
 A complete application, "Backlinks Watchlist" is at
 	https://github.com/greencardamom/Backlinks-Watchlist
@@ -42,7 +42,6 @@ A complete application, "Backlinks Watchlist" is at
 
 Other awk based tools
 =====================
-Other bots and tools for Wikipedia written in awk:
 
 Wikiget
 	https://github.com/greencardamom/Wikiget

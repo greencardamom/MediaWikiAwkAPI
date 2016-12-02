@@ -1,10 +1,12 @@
+#!/bin/awk -bE
+
 # backlinks.awk
 #  -- demonstration program of the MediaWiki Awk API Library.
 #
 #  Prints the full list of backlinks such as seen at "Special:What Links Here"
-#   * It uses the "continue" function (not limited by 500 results).
-#   * It includes (transcluded) pages for Template: types, and (file) pages for File: types
-#   * It includes second-level backlinks (from redirects)
+#   * Uses the "continue" API command (not limited by 500 results).
+#   * Includes (transcluded) pages for Template: types, and (file) pages for File: types
+#   * Includes second-level backlinks (from redirects)
 #
 
 @include "json2var.awk"
@@ -28,16 +30,15 @@ BEGIN {
 
 function backlinks(entity,	url, blinks) {
 
-        gsub(" ","_",entity)
-
-        url = "http://en.wikipedia.org/w/api.php?action=query&list=backlinks&bltitle=" entity "&blredirect&bllimit=250&continue=&blfilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
+        
+        url = "http://en.wikipedia.org/w/api.php?action=query&list=backlinks&bltitle=" urlencodeawk(entity) "&blredirect&bllimit=250&continue=" urlencodeawk("-||") "&blfilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
         blinks = getbacklinks(url, entity, "blcontinue") # normal backlinks
 
         if ( entity ~ "^Template:") {    # transclusion backlinks
-            url = "http://en.wikipedia.org/w/api.php?action=query&list=embeddedin&eititle=" entity "&continue=&eilimit=500&format=json&utf8=1&maxlag=" Maxlag
+            url = "http://en.wikipedia.org/w/api.php?action=query&list=embeddedin&eititle=" urlencodeawk(entity) "&continue=" urlencodeawk("-||") "&eilimit=500&format=json&utf8=1&maxlag=" Maxlag
             blinks = blinks "\n" getbacklinks(url, entity, "eicontinue")
         } else if ( entity ~ "^File:") { # file backlinks
-            url = "http://en.wikipedia.org/w/api.php?action=query&list=imageusage&iutitle=" entity "&iuredirect&iulimit=250&continue=&iufilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
+            url = "http://en.wikipedia.org/w/api.php?action=query&list=imageusage&iutitle=" urlencodeawk(entity) "&iuredirect&iulimit=250&continue=" urlencodeawk("-||") "&iufilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
             blinks = blinks "\n" getbacklinks(url, entity, "iucontinue")
         }
 
@@ -50,17 +51,19 @@ function backlinks(entity,	url, blinks) {
 function getbacklinks(url, entity, method,      jsonin, jsonout, continuecode) {
 
         jsonin = http2var(url)
+        if(apierror(jsonin, "json") > 0)
+          return ""
         jsonout = json2var(jsonin)
         continuecode = getcontinue(jsonin, method)
 
         while ( continuecode ) {
 
             if ( method == "eicontinue" )
-                url = "http://en.wikipedia.org/w/api.php?action=query&list=embeddedin&eititle=" entity "&eilimit=500&continue=-||&eicontinue=" continuecode "&format=json&utf8=1&maxlag=" Maxlag
+                url = "http://en.wikipedia.org/w/api.php?action=query&list=embeddedin&eititle=" urlencodeawk(entity) "&eilimit=500&continue=" urlencodeawk("-||") "&eicontinue=" urlencodeawk(continuecode) "&format=json&utf8=1&maxlag=" Maxlag
             if ( method == "iucontinue" )
-                url = "http://en.wikipedia.org/w/api.php?action=query&list=imageusage&iutitle=" entity "&iuredirect&iulimit=250&continue=&iufilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
+                url = "http://en.wikipedia.org/w/api.php?action=query&list=imageusage&iutitle=" urlencodeawk(entity) "&iuredirect&iulimit=250&continue=" urlencodeawk("-||") "&iucontinue=" urlencodeawk(continuecode) "&iufilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
             if ( method == "blcontinue" )
-                url = "http://en.wikipedia.org/w/api.php?action=query&list=backlinks&bltitle=" entity "&blredirect&bllimit=250&continue=-||&blcontinue=" continuecode "&blfilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
+                url = "http://en.wikipedia.org/w/api.php?action=query&list=backlinks&bltitle=" urlencodeawk(entity) "&blredirect&bllimit=250&continue=" urlencodeawk("-||") "&blcontinue=" urlencodeawk(continuecode) "&blfilterredir=nonredirects&format=json&utf8=1&maxlag=" Maxlag
 
             jsonin = http2var(url)
             jsonout = jsonout "\n" json2var(jsonin)
@@ -83,25 +86,4 @@ function getcontinue(jsonin, method     ,re,a,b,c) {
         return 0
 }
 
-
-#
-# Uniq a list of \n separated names
-#
-function uniq(names,    b,c,i,x) {
-
-        c = split(names, b, "\n")
-        names = "" # free memory
-        while (i++ < c) {
-            if(b[i] ~ "for API usage") {
-                print "Max lag exceeded. Try again when servers less busy or increase Maxlag variable. See https://www.mediawiki.org/wiki/Manual:Maxlag_parameter."
-                exit
-            }
-            if(b[i] == "")
-                continue
-            if(x[b[i]] == "")
-                x[b[i]] = b[i]
-        }
-        delete b # free memory
-        return join2(x,"\n")
-}
 
