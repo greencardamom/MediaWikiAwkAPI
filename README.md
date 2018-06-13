@@ -1,4 +1,4 @@
-**UPDATE (June 2018)** -- this project no longer maintained. [BotWikiAwk](https://github.com/greencardamom/BotWikiAwk) is a newer project that includes expanded libraries and tools. Library functions are in library.awk and updated JSON functions are in json.awk
+**UPDATE (June 2018)** -- this project no longer maintained. [BotWikiAwk](https://github.com/greencardamom/BotWikiAwk) is a newer project that includes expanded libraries and tools. Library functions are in library.awk (replacing mwapi.awk) and updated JSON functions are in json.awk (replacing json2var.awk)
 
 
 MediaWiki Awk API
