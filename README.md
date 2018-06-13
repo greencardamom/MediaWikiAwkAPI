@@ -1,3 +1,6 @@
+**UPDATE** -- this project no longer maintained. [BotWikiAwk](https://github.com/greencardamom/BotWikiAwk) is a newer project that includes expanded libraries and tools. Library functions are in library.awk and updated JSON functions are in json.awk
+
+
 MediaWiki Awk API
 ===========================
 by User:Green Cardamom at en.wikipedia.org
